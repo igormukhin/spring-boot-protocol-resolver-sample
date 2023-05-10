@@ -1,6 +1,8 @@
 package com.example.springbootprotocolresolversample;
 
 
+import java.util.Base64;
+
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ProtocolResolver;
 import org.springframework.core.io.Resource;
@@ -15,7 +17,7 @@ class Base64ProtocolResolver implements ProtocolResolver {
     public Resource resolve(String location, ResourceLoader resourceLoader) {
         if (location.startsWith(PREFIX)) {
             var encoded = location.substring(PREFIX_LENGTH);
-            return new ByteArrayResource(org.apache.tomcat.util.codec.binary.Base64.decodeBase64(encoded));
+            return new ByteArrayResource(Base64.getDecoder().decode(encoded));
         }
 
         return null;
