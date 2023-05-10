@@ -6,21 +6,23 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 
-class Base64ProtocolResolverConfigurer implements BeanFactoryPostProcessor, ApplicationContextAware {
+class Base64ProtocolResolverConfigurer implements BeanFactoryPostProcessor, ResourceLoaderAware {
 
-    private ApplicationContext applicationContext;
+    private ResourceLoader resourceLoader;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        if (applicationContext instanceof DefaultResourceLoader resourceLoader) {
-            resourceLoader.addProtocolResolver(new Base64ProtocolResolver());
+        if (resourceLoader instanceof DefaultResourceLoader defaultResourceLoader) {
+            defaultResourceLoader.addProtocolResolver(new Base64ProtocolResolver());
         }
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
     }
 }
